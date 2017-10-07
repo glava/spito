@@ -4,14 +4,21 @@ import org.http4s._
 import org.http4s.dsl._
 import org.http4s.server.blaze.BlazeBuilder
 import org.http4s.util.StreamApp
+import io.circe.generic.auto._
+import io.circe.syntax._
+import org.http4s.circe._
 
+case class Respone(chain: List[Block], length: Long)
 
 object Service extends StreamApp {
+
+  val b = new Blockchain
+
   val routes = HttpService {
     case GET -> Root / "mine" =>
       Ok(s"Start mining")
     case GET -> Root / "chain" =>
-      Ok(s"Chaining bro")
+      Ok(Respone(b.chain.toList, b.chain.length).asJson)
     case POST -> Root / "transactions" / "new" =>
       Ok("I'm adding transaction")
   }

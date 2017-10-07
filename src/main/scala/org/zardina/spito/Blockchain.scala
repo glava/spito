@@ -1,5 +1,8 @@
 package org.zardina.spito
 
+import java.nio.charset.StandardCharsets
+
+import org.apache.commons.codec.binary.Hex
 import org.apache.commons.lang3.SerializationUtils
 
 import scala.collection.mutable.ListBuffer
@@ -8,9 +11,16 @@ case class Transaction(sender: String, recepient: String, amount: Double)
 
 case class Block(index: Int, transaction: ListBuffer[Transaction], proof: Int, previousHash: String, timestamp: Long) {
 
-  def hash: String = {
-    val sha = java.security.MessageDigest.getInstance("SHA-1")
-    new sun.misc.BASE64Encoder().encode(sha.digest(SerializationUtils.serialize(this)))
+  /**
+    * create a SHA-256 hash of a Block
+    */
+  lazy val hash: String = Hash(SerializationUtils.serialize(this))
+}
+
+object Hash {
+  def apply(byte: Array[Byte]): String = {
+    val sha = java.security.MessageDigest.getInstance("SHA-256")
+    Hex.encodeHexString(sha.digest(byte))
   }
 }
 
@@ -53,4 +63,32 @@ class Blockchain {
     chain.append(block)
     block
   }
+
+  /**
+    *
+    * Simple Proof of Work Algorithm:
+    * Find a number p' such that isValidProof(p, p') is true
+    * p is the previous proof, and p' is the new proof
+    *
+    * @param lastProof
+    * @return
+    */
+  /**/
+  def proofOfWork(lastProof: Int): Int = {
+    var proof = 0
+    while (!isValidProof(lastProof, proof)) {
+      proof = proof + 1
+    }
+    proof
+  }
+
+  /**
+    * @param lastProof
+    * @param proof
+    * @return true if hash("lastProof"+"proof") contains 4 last zeros
+    */
+  /*
+  * */
+  def isValidProof(lastProof: Int, proof: Int): Boolean =
+    Hash(s"$lastProof$proof".getBytes(StandardCharsets.UTF_8)).takeRight(4) == "0000"
 }

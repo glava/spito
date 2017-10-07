@@ -1,10 +1,18 @@
 package org.zardina.spito
 
+import org.apache.commons.lang3.SerializationUtils
+
 import scala.collection.mutable.ListBuffer
 
 case class Transaction(sender: String, recepient: String, amount: Double)
 
-case class Block(index: Int, transaction: ListBuffer[Transaction], proof: Int, previousHash: String, timestamp: Long)
+case class Block(index: Int, transaction: ListBuffer[Transaction], proof: Int, previousHash: String, timestamp: Long) {
+
+  def hash: String = {
+    val sha = java.security.MessageDigest.getInstance("SHA-1")
+    new sun.misc.BASE64Encoder().encode(sha.digest(SerializationUtils.serialize(this)))
+  }
+}
 
 class Blockchain {
 

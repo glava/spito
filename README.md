@@ -1,5 +1,9 @@
 # spito
 
+I created this project by following the great article [Learn Blockchains by Building One](https://hackernoon.com/learn-blockchains-by-building-one-117428612f46).
+
+I documented learning process in commit messages. The project name is of course chosen by the great http://polumenta.zardina.org/
+
 # http api
 
 1. create transaction

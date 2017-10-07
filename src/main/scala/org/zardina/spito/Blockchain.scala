@@ -4,7 +4,7 @@ import scala.collection.mutable.ListBuffer
 
 case class Transaction(sender: String, recepient: String, amount: Double)
 
-  val currentTransactions: scala.collection.immutable.List[Transaction] = scala.collection.immutable.List.empty
+case class Block(index: Int, transaction: ListBuffer[Transaction], proof: Int, previousHash: String, timestamp: Long)
 
 class Blockchain {
 
@@ -24,7 +24,30 @@ class Blockchain {
     currentTransactions.length - 1
   }
 
+  /**
+    * Create a new Block in the Blockchain and appends it to chain
+    * @param proof The proof given by the Proof of Work algorithm
+    * @param previousHash Hash of previous Block
+    * @return new Block
+    */
+  /**/
+  def newBlock(proof: Int, previousHash: Option[String]): Block = {
+    val block = Block(
+      index = currentTransactions.size + 1,
+      transaction = currentTransactions,
+      proof = proof,
+      previousHash = previousHash.getOrElse(chain.hashCode().toString),
+      timestamp = java.time.LocalDate.now().toEpochDay
+    )
+
+    currentTransactions.drop(currentTransactions.size)
+    chain.append(block)
+    block
+  }
+
 }
+
+
 
 
 

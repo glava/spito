@@ -26,7 +26,8 @@ class Blockchain {
 
   /**
     * Create a new Block in the Blockchain and appends it to chain
-    * @param proof The proof given by the Proof of Work algorithm
+    *
+    * @param proof        The proof given by the Proof of Work algorithm
     * @param previousHash Hash of previous Block
     * @return new Block
     */
@@ -44,10 +45,4 @@ class Blockchain {
     chain.append(block)
     block
   }
-
 }
-
-
-
-
-

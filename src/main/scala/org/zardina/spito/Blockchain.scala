@@ -50,7 +50,7 @@ class Blockchain {
     * @return new Block
     */
   /**/
-  def newBlock(proof: Int, previousHash: Option[String]): Block = {
+  def newBlock(proof: Int, previousHash: Option[String] = None): Block = {
     val block = Block(
       index = currentTransactions.size + 1,
       transaction = currentTransactions,
@@ -91,4 +91,11 @@ class Blockchain {
   * */
   def isValidProof(lastProof: Int, proof: Int): Boolean =
     Hash(s"$lastProof$proof".getBytes(StandardCharsets.UTF_8)).takeRight(4) == "0000"
+
+  /**
+    *
+    * @return last block in chain
+    */
+  /**/
+  def lastBlock: Block = chain.last
 }
